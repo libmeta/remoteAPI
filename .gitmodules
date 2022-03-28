@@ -1,0 +1,2 @@
+[submodule "meta_libs"]
+	url = https://github.com/libmeta/meta_libs.git
