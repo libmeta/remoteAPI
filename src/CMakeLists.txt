@@ -1,13 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(src LANGUAGES)
+project(src)
 
-#aux_source_directory(push PUSH)
+aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} _SOURCES)
 
 add_library(${TAG_LIB_NAME} SHARED
-    remoteapi.cpp
+    ${_SOURCES}
     )
-
 include_directories(${TAG_LIB_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}

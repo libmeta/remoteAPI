@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(test_send_ui VERSION 0.1 LANGUAGES CXX)
+project(test_remote_ui VERSION 0.1 LANGUAGES CXX)
+set(TAG_NAME test_remote_ui)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -22,31 +23,31 @@ set(PROJECT_SOURCES
     )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(test_send_ui
+    qt_add_executable(${TAG_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         )
     # Define target properties for Android with Qt 6 as:
-    #    set_property(TARGET test_send_ui APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+    #    set_property(TARGET ${TAG_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
     #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
     # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-        add_library(test_send_ui SHARED
+        add_library(${TAG_NAME} SHARED
             ${PROJECT_SOURCES}
             )
         # Define properties for Android with Qt 5 after find_package() calls as:
         #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-        add_executable(test_send_ui
+        add_executable(${TAG_NAME}
             ${PROJECT_SOURCES}
             )
     endif()
 endif()
 
-target_link_libraries(test_send_ui PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(${TAG_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
-set_target_properties(test_send_ui PROPERTIES
+set_target_properties(${TAG_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.test_remote.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -55,7 +56,7 @@ set_target_properties(test_send_ui PROPERTIES
     )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(test_send_ui)
+    qt_finalize_executable(${TAG_NAME})
 endif()
 
 
@@ -71,7 +72,9 @@ if(ANDROID)
     file(GLOB META_SO                           ${CMAKE_BINARY_DIR}/meta_libs/*.so)
     file(GLOB REMOTE_API_SO                     ${CMAKE_BINARY_DIR}/src/*.so)
     file(COPY ${META_SO} DESTINATION            ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)
+    message("file(COPY ${META_SO} DESTINATION   ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)")
     file(COPY ${REMOTE_API_SO} DESTINATION      ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)
+    message("file(COPY ${REMOTE_API_SO} DESTINATION      ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)")
 
     add_dynamic_lib(_remoteApi                  ${CMAKE_BINARY_DIR}/src/libremoteApi.so)
     add_dynamic_lib(srt                         ${CMAKE_BINARY_DIR}/meta_libs/libsrt.so)
@@ -84,9 +87,9 @@ if(ANDROID)
     add_dynamic_lib(swresample                  ${CMAKE_BINARY_DIR}/meta_libs/libswresample.so)
     add_dynamic_lib(swscale                     ${CMAKE_BINARY_DIR}/meta_libs/libswscale.so)
 
-    include_directories(test_send_ui PRIVATE ${CMAKE_SOURCE_DIR}/include)
+    include_directories(${TAG_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
     message("_LINK_LIBS = ${_LINK_LIBS}")
-    target_link_libraries(test_send_ui PRIVATE
+    target_link_libraries(${TAG_NAME} PRIVATE
         ${_LINK_LIBS}
         )
 
