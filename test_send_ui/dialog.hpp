@@ -2,6 +2,8 @@
 
 #include <QDialog>
 
+#include <remoteapi.hpp>
+
 QT_BEGIN_NAMESPACE
     namespace Ui { class Dialog; }
 QT_END_NAMESPACE
