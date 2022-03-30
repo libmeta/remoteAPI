@@ -15,11 +15,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
+aux_source_directory(${CMAKE_SOURCE_DIR}/src _SOURCES)
+aux_source_directory(${CMAKE_SOURCE_DIR}/include _INCLUDES)
+
 set(PROJECT_SOURCES
     main.cpp
     dialog.cpp
     dialog.hpp
     dialog.ui
+    ${_SOURCES}
+    ${_INCLUDES}
     )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -60,7 +65,6 @@ if(QT_VERSION_MAJOR EQUAL 6)
 endif()
 
 
-
 macro(add_dynamic_lib LIB_NAME LIB_PATH)
     add_library(${LIB_NAME} SHARED IMPORTED)
     set_target_properties(${LIB_NAME}  PROPERTIES IMPORTED_LOCATION ${LIB_PATH})
@@ -68,15 +72,16 @@ macro(add_dynamic_lib LIB_NAME LIB_PATH)
 endmacro(add_dynamic_lib)
 
 if(ANDROID)
-    set(_ANDROID_LIBRARY_DIR                    ${CMAKE_CURRENT_BINARY_DIR}/android-build/libs/arm64-v8a)
-    file(GLOB META_SO                           ${CMAKE_BINARY_DIR}/meta_libs/*.so)
-    file(GLOB REMOTE_API_SO                     ${CMAKE_BINARY_DIR}/src/*.so)
-    file(COPY ${META_SO} DESTINATION            ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)
-    message("file(COPY ${META_SO} DESTINATION   ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)")
-    file(COPY ${REMOTE_API_SO} DESTINATION      ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)
-    message("file(COPY ${REMOTE_API_SO} DESTINATION      ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)")
+    set(_ANDROID_LIBRARY_DIR                            ${CMAKE_CURRENT_BINARY_DIR}/android-build/libs/${CMAKE_ANDROID_ARCH_ABI})
+    file(GLOB META_SO                                   ${CMAKE_BINARY_DIR}/meta_libs/*.so)
+    file(COPY ${META_SO}       DESTINATION              ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)
+    message("file(COPY ${META_SO} DESTINATION           ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)")
 
-    add_dynamic_lib(_remoteApi                  ${CMAKE_BINARY_DIR}/src/libremoteApi.so)
+#    file(GLOB REMOTE_API_SO                             ${CMAKE_BINARY_DIR}/src/libremoteApi.so)
+#    file(COPY ${REMOTE_API_SO} DESTINATION              ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)
+#    message("file(COPY ${REMOTE_API_SO} DESTINATION     ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)")
+#    add_dynamic_lib(remoteapi                   ${CMAKE_BINARY_DIR}/meta_libs/libremoteApi.so)
+
     add_dynamic_lib(srt                         ${CMAKE_BINARY_DIR}/meta_libs/libsrt.so)
     add_dynamic_lib(ssl                         ${CMAKE_BINARY_DIR}/meta_libs/libssl.so)
     add_dynamic_lib(crypto                      ${CMAKE_BINARY_DIR}/meta_libs/libcrypto.so)
@@ -86,9 +91,9 @@ if(ANDROID)
     add_dynamic_lib(avutil                      ${CMAKE_BINARY_DIR}/meta_libs/libavutil.so)
     add_dynamic_lib(swresample                  ${CMAKE_BINARY_DIR}/meta_libs/libswresample.so)
     add_dynamic_lib(swscale                     ${CMAKE_BINARY_DIR}/meta_libs/libswscale.so)
+    message("_LINK_LIBS = ${_LINK_LIBS}")
 
     include_directories(${TAG_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
-    message("_LINK_LIBS = ${_LINK_LIBS}")
     target_link_libraries(${TAG_NAME} PRIVATE
         ${_LINK_LIBS}
         )

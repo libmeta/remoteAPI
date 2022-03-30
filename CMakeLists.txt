@@ -6,7 +6,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
-set(TAG_LIB_NAME ${PROJECT_NAME} CACHE INTERNAL "target lib name")
 
 message("=>start add_subdirectory(meta_libs)")
 add_subdirectory(meta_libs)
