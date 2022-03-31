@@ -17,5 +17,5 @@
 class REMOTEAPI_EXPORT RemoteApi
 {
 public:
-    RemoteApi();
+    explicit RemoteApi();
 };

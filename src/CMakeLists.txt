@@ -4,16 +4,17 @@ project(src)
 set(TAG_LIB_NAME remoteApi)
 
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} _SOURCES)
-
+#file(GLOB _SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 add_library(${TAG_LIB_NAME} SHARED
     ${_SOURCES}
     )
 
-include_directories(${TAG_LIB_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}
+target_include_directories(${TAG_LIB_NAME} PRIVATE
     ${META_INCLUDES}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
     )
+
 message("META_INCLUDES = ${META_INCLUDES}")
 
 target_link_directories(${TAG_LIB_NAME} PRIVATE
