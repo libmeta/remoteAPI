@@ -7,7 +7,9 @@ aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} _SOURCES)
 #file(GLOB _SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 add_library(${TAG_LIB_NAME} SHARED
     ${_SOURCES}
+    ${META_SOURCES}
     )
+message("META_SOURCES = ${META_SOURCES}")
 
 target_include_directories(${TAG_LIB_NAME} PRIVATE
     ${META_INCLUDES}

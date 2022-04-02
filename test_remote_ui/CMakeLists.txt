@@ -1,21 +1,18 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.14)
 
 project(test_remote_ui VERSION 0.1 LANGUAGES CXX)
 set(TAG_NAME test_remote_ui)
 include(AddLib)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
-
 aux_source_directory(${CMAKE_SOURCE_DIR}/src _SOURCES)
 
 set(PROJECT_SOURCES
@@ -24,6 +21,7 @@ set(PROJECT_SOURCES
     dialog.hpp
     dialog.ui
     ${_SOURCES}
+    ${META_SOURCES}
     )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
