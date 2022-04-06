@@ -11,8 +11,14 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+foreach(MOD Core Gui Multimedia MultimediaWidgets Widgets)
+    find_package(QT NAMES Qt6 COMPONENTS ${MOD})
+    find_package(Qt${QT_VERSION_MAJOR} COMPONENTS ${MOD})
+endforeach()
+
+#find_package(Qt6 COMPONENTS Multimedia)
+#find_package(Qt6 COMPONENTS MultimediaWidgets)
+
 aux_source_directory(${CMAKE_SOURCE_DIR}/src _SOURCES)
 
 set(PROJECT_SOURCES
@@ -47,7 +53,13 @@ else()
     endif()
 endif()
 
-target_link_libraries(${TAG_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(${TAG_NAME} PRIVATE
+    Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Multimedia
+    Qt${QT_VERSION_MAJOR}::MultimediaWidgets
+    Qt${QT_VERSION_MAJOR}::Widgets
+    )
 
 set_target_properties(${TAG_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.test_remote.com

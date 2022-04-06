@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QDialog>
+#include <QtMultimedia>
+#include <QtMultimediaWidgets>
 
 #include <remoteapi.hpp>
 
