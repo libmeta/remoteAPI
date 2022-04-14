@@ -18,10 +18,11 @@ message("=>start add_subdirectory(src)")
 add_subdirectory(src)
 message("=>end add_subdirectory(src)")
 
-set(NEED_DEBUG_TESTS true)
-if(${NEED_DEBUG_TESTS})
+option(NEED_DEBUG_TESTS "NEED_DEBUG_TESTS" ON)
+if(NEED_DEBUG_TESTS)
 message("=>start add_subdirectory(test_remote_ui)")
 add_subdirectory(test_remote_ui)
 message("=>end add_subdirectory(test_remote_ui)")
 endif()
+
 #install(TARGETS ${TAG_LIB_NAME} LIBRARY DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})

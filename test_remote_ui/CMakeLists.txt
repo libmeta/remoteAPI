@@ -28,29 +28,29 @@ set(PROJECT_SOURCES
     dialog.ui
     ${_SOURCES}
     ${META_SOURCES}
-    )
+)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(${TAG_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        )
-    # Define target properties for Android with Qt 6 as:
-    #    set_property(TARGET ${TAG_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-    #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-    # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+    )
+# Define target properties for Android with Qt 6 as:
+#    set_property(TARGET ${TAG_NAME} APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
         add_library(${TAG_NAME} SHARED
             ${PROJECT_SOURCES}
-            )
-        # Define properties for Android with Qt 5 after find_package() calls as:
-        #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(${TAG_NAME}
-            ${PROJECT_SOURCES}
-            )
-    endif()
+        )
+    # Define properties for Android with Qt 5 after find_package() calls as:
+    #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+else()
+    add_executable(${TAG_NAME}
+        ${PROJECT_SOURCES}
+    )
+endif()
 endif()
 
 target_link_libraries(${TAG_NAME} PRIVATE
@@ -59,7 +59,7 @@ target_link_libraries(${TAG_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Multimedia
     Qt${QT_VERSION_MAJOR}::MultimediaWidgets
     Qt${QT_VERSION_MAJOR}::Widgets
-    )
+)
 
 set_target_properties(${TAG_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.test_remote.com
@@ -67,7 +67,7 @@ set_target_properties(${TAG_NAME} PROPERTIES
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
-    )
+)
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(${TAG_NAME})
@@ -76,7 +76,7 @@ endif()
 target_include_directories(${TAG_NAME} PRIVATE
     ${META_INCLUDES}
     ${CMAKE_SOURCE_DIR}/include
-    )
+)
 
 if(ANDROID)
     set(_ANDROID_LIBRARY_DIR                            ${CMAKE_CURRENT_BINARY_DIR}/android-build/libs/${CMAKE_ANDROID_ARCH_ABI})
@@ -103,6 +103,9 @@ if(ANDROID)
     include_directories(${TAG_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
     target_link_libraries(${TAG_NAME} PRIVATE
         ${_LINK_DYNAMIC_LIBS}
-        )
+    )
+
+target_option_on_definition(${TAG_NAME} HAVE_FFMPEG)
+target_option_on_definition(${TAG_NAME} HAVE_WEBRTC)
 
 endif(ANDROID)
