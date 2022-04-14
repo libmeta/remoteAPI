@@ -32,9 +32,6 @@ target_link_libraries(${TAG_LIB_NAME} PRIVATE
 message("META_LIBS = ${META_LIBS}")
 target_compile_definitions(${TAG_LIB_NAME} PRIVATE REMOTEAPI_LIBRARY)
 
-target_option_on_definition(${TAG_LIB_NAME} HAVE_FFMPEG)
-target_option_on_definition(${TAG_LIB_NAME} HAVE_WEBRTC)
-
 #set_target_properties(${TAG_LIB_NAME} PROPERTIES
 #        BUILD_WITH_INSTALL_RPATH FALSE
 #        LINK_FLAGS "-Wl,-rpath,$ORIGIN/")

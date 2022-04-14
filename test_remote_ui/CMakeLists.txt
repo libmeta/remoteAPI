@@ -105,7 +105,4 @@ if(ANDROID)
         ${_LINK_DYNAMIC_LIBS}
     )
 
-target_option_on_definition(${TAG_NAME} HAVE_FFMPEG)
-target_option_on_definition(${TAG_NAME} HAVE_WEBRTC)
-
 endif(ANDROID)
