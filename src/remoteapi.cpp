@@ -1,7 +1,7 @@
 #include "remoteapi.hpp"
 
 #include <cstdio>
-#include <json.hpp>
+#include <nlohmann/json.hpp>
 #include <jmi.h>
 
 #include "srtwrap.hpp"
