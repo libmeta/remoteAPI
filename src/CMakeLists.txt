@@ -4,6 +4,7 @@ project(src)
 set(TAG_LIB_NAME remoteApi)
 
 list(APPEND _INCLUDES ${CMAKE_CURRENT_SOURCE_DIR})
+list(APPEND _INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/webrtc_moudle)
 file(GLOB_RECURSE _SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 find_libs(log-lib log)

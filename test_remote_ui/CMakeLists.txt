@@ -22,6 +22,7 @@ endforeach()
 #find_package(Qt6 COMPONENTS MultimediaWidgets)
 
 list(APPEND _INCLUDES ${CMAKE_SOURCE_DIR}/src)
+list(APPEND _INCLUDES ${CMAKE_SOURCE_DIR}/src/webrtc_moudle)
 file(GLOB_RECURSE _SOURCES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 set(PROJECT_SOURCES
