@@ -1,14 +1,12 @@
 #include "remoteapi.hpp"
+#include "webrtc_moudle/rtc/scalable_track_source.hpp"
+#include "webrtc_moudle/rtc/native_buffer.hpp"
 
-#include <cstdio>
 #include <nlohmann/json.hpp>
 #include <jmi.h>
 
 #include "srtwrap/srtwrap.hpp"
 #include "ffwrap/ffmuxer.hpp"
-
-#include "rtc_base/platform_thread.h"
-#include "webrtc_moudle/rtc/native_buffer.hpp"
 
 RemoteApi::RemoteApi()
 {

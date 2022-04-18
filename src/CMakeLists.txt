@@ -3,9 +3,7 @@ cmake_minimum_required(VERSION 3.14)
 project(src)
 set(TAG_LIB_NAME remoteApi)
 
-include(FileRecursive)
-
-aux_include_directory(${CMAKE_CURRENT_SOURCE_DIR} _INCLUDES)
+list(APPEND _INCLUDES ${CMAKE_CURRENT_SOURCE_DIR})
 file(GLOB_RECURSE _SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 find_libs(log-lib log)

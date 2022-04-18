@@ -21,8 +21,7 @@ endforeach()
 #find_package(Qt6 COMPONENTS Multimedia)
 #find_package(Qt6 COMPONENTS MultimediaWidgets)
 
-
-aux_include_directory(${CMAKE_SOURCE_DIR}/src _INCLUDES)
+list(APPEND _INCLUDES ${CMAKE_SOURCE_DIR}/src)
 file(GLOB_RECURSE _SOURCES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 set(PROJECT_SOURCES
