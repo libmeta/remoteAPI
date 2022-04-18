@@ -1,11 +1,18 @@
 cmake_minimum_required(VERSION 3.14)
 
 project(src)
-
 set(TAG_LIB_NAME remoteApi)
 
-aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR} _SOURCES)
-#file(GLOB _SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+include(FileRecursive)
+
+aux_include_directory(${CMAKE_CURRENT_SOURCE_DIR} _INCLUDES)
+file(GLOB_RECURSE _SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+
+find_libs(log-lib log)
+find_libs(android-lib android)
+#find_libs(pthread-lib pthread)
+#message(" findliblist = ${findliblist}")
+
 add_library(${TAG_LIB_NAME} SHARED
     ${_SOURCES}
     ${META_SOURCES}
@@ -16,6 +23,7 @@ target_include_directories(${TAG_LIB_NAME} PRIVATE
     ${META_INCLUDES}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
+    ${_INCLUDES}
 )
 
 message("META_INCLUDES = ${META_INCLUDES}")
@@ -28,6 +36,7 @@ message("META_DIRECTORIES = ${META_DIRECTORIES}")
 
 target_link_libraries(${TAG_LIB_NAME} PRIVATE
     ${META_LIBS}
+    ${findliblist}
 )
 message("META_LIBS = ${META_LIBS}")
 target_compile_definitions(${TAG_LIB_NAME} PRIVATE REMOTEAPI_LIBRARY)

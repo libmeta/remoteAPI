@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.14)
 project(test_remote_ui VERSION 0.1 LANGUAGES CXX)
 set(TAG_NAME test_remote_ui)
 include(AddLib)
+include(FileRecursive)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOUIC ON)
@@ -10,6 +11,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 foreach(MOD Core Gui Multimedia MultimediaWidgets Widgets)
     find_package(QT NAMES Qt6 COMPONENTS ${MOD})
@@ -19,7 +21,9 @@ endforeach()
 #find_package(Qt6 COMPONENTS Multimedia)
 #find_package(Qt6 COMPONENTS MultimediaWidgets)
 
-aux_source_directory(${CMAKE_SOURCE_DIR}/src _SOURCES)
+
+aux_include_directory(${CMAKE_SOURCE_DIR}/src _INCLUDES)
+file(GLOB_RECURSE _SOURCES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
 set(PROJECT_SOURCES
     main.cpp
@@ -76,33 +80,31 @@ endif()
 target_include_directories(${TAG_NAME} PRIVATE
     ${META_INCLUDES}
     ${CMAKE_SOURCE_DIR}/include
+    ${_INCLUDES}
 )
+#message("META_INCLUDES = ${META_INCLUDES}")
+
+target_link_directories(${TAG_NAME} PRIVATE
+    ${META_DIRECTORIES}
+    ${CMAKE_CURRENT_BINARY_DIR})
+#message("META_DIRECTORIES = ${META_DIRECTORIES}")
+
 
 if(ANDROID)
     set(_ANDROID_LIBRARY_DIR                            ${CMAKE_CURRENT_BINARY_DIR}/android-build/libs/${CMAKE_ANDROID_ARCH_ABI})
     file(GLOB META_SO                                   ${CMAKE_BINARY_DIR}/meta_libs/*.so)
     file(COPY ${META_SO}       DESTINATION              ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)
     message("file(COPY ${META_SO} DESTINATION           ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)")
-
-    #    file(GLOB REMOTE_API_SO                             ${CMAKE_BINARY_DIR}/src/libremoteApi.so)
-    #    file(COPY ${REMOTE_API_SO} DESTINATION              ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)
-    #    message("file(COPY ${REMOTE_API_SO} DESTINATION     ${_ANDROID_LIBRARY_DIR} FOLLOW_SYMLINK_CHAIN)")
-    #    add_dynamic_lib(remoteapi                   ${CMAKE_BINARY_DIR}/meta_libs/libremoteApi.so)
-
-    add_dynamic_lib(srt                         ${CMAKE_BINARY_DIR}/meta_libs/libsrt.so)
-    add_dynamic_lib(ssl                         ${CMAKE_BINARY_DIR}/meta_libs/libssl.so)
-    add_dynamic_lib(crypto                      ${CMAKE_BINARY_DIR}/meta_libs/libcrypto.so)
-    add_dynamic_lib(avcodec                     ${CMAKE_BINARY_DIR}/meta_libs/libavcodec.so)
-    add_dynamic_lib(avfilter                    ${CMAKE_BINARY_DIR}/meta_libs/libavfilter.so)
-    add_dynamic_lib(avformat                    ${CMAKE_BINARY_DIR}/meta_libs/libavformat.so)
-    add_dynamic_lib(avutil                      ${CMAKE_BINARY_DIR}/meta_libs/libavutil.so)
-    add_dynamic_lib(swresample                  ${CMAKE_BINARY_DIR}/meta_libs/libswresample.so)
-    add_dynamic_lib(swscale                     ${CMAKE_BINARY_DIR}/meta_libs/libswscale.so)
-    message("_LINK_DYNAMIC_LIBS = ${_LINK_DYNAMIC_LIBS}")
-
-    include_directories(${TAG_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
-    target_link_libraries(${TAG_NAME} PRIVATE
-        ${_LINK_DYNAMIC_LIBS}
-    )
-
 endif(ANDROID)
+
+find_libs(log-lib log)
+find_libs(android-lib android)
+#find_libs(pthread-lib pthread)
+#message(" findliblist =${findliblist}")
+
+
+target_link_libraries(${TAG_NAME} PRIVATE
+    ${META_LIBS}
+    ${findliblist}
+)
+#message("META_LIBS = ${META_LIBS}")
